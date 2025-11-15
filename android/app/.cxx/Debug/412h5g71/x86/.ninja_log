@@ -1,0 +1,16 @@
+# ninja log v5
+20	169	0	C:/RN/IGAppRn/IGAppRn/android/app/.cxx/Debug/412h5g71/x86/CMakeFiles/cmake.verify_globs	feb1672f390a6d0d
+57	23275	7848835105873218	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/f318a4d37024e3c5869037697209151c/source/codegen/jni/react/renderer/components/safeareacontext/States.cpp.o	360c0256b03bd605
+32	26980	7848835142868001	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/f7f86dc5d613bc7b2858c1217768998b/codegen/jni/react/renderer/components/safeareacontext/EventEmitters.cpp.o	6e617d8d9ce26ea1
+66	29370	7848835166960071	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/9cda659fc935a1efc064a900e94e1f6a/react/renderer/components/safeareacontext/safeareacontextJSI-generated.cpp.o	b08a7ce4766c89b7
+82	29765	7848835170810231	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/1cba8434bbccd207aff90f79d422a9c0/android/build/generated/source/codegen/jni/safeareacontext-generated.cpp.o	9880d434a1cb7697
+16	32241	7848835195959513	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/1cba8434bbccd207aff90f79d422a9c0/common/cpp/react/renderer/components/safeareacontext/RNCSafeAreaViewState.cpp.o	606a5c5f1bbe56
+10	33310	7848835206656339	CMakeFiles/appmodules.dir/OnLoad.cpp.o	f83eedd0cef3c262
+73	33722	7848835211016748	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/f318a4d37024e3c5869037697209151c/source/codegen/jni/react/renderer/components/safeareacontext/ShadowNodes.cpp.o	117d8855e9c593c3
+41	34414	7848835217736038	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/f318a4d37024e3c5869037697209151c/source/codegen/jni/react/renderer/components/safeareacontext/Props.cpp.o	26964ba0e6cb4a9a
+48	36374	7848835237517158	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/86454fe9c2c338b111a52ec4d8e549e1/jni/react/renderer/components/safeareacontext/ComponentDescriptors.cpp.o	20e88a4ec8dab27
+26	36546	7848835239548144	safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir/b9c777d344a7119ea2932a98d612517f/cpp/react/renderer/components/safeareacontext/RNCSafeAreaViewShadowNode.cpp.o	31b1fed96a1a2744
+36547	36863	7848835242768362	C:/RN/IGAppRn/IGAppRn/android/app/build/intermediates/cxx/Debug/412h5g71/obj/x86/libreact_codegen_safeareacontext.so	4b9cba8181574a55
+2	38206	7848835255995978	CMakeFiles/appmodules.dir/C_/RN/IGAppRn/IGAppRn/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	4b6027af5d146544
+38207	38417	7848835258453929	C:/RN/IGAppRn/IGAppRn/android/app/build/intermediates/cxx/Debug/412h5g71/obj/x86/libappmodules.so	56ba56bcfcd55df8
+7	133	0	C:/RN/IGAppRn/IGAppRn/android/app/.cxx/Debug/412h5g71/x86/CMakeFiles/cmake.verify_globs	feb1672f390a6d0d
