@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import { fetchPostsUseCase } from '../usecases/fetchPosts';
-import { FirestorePostRepository } from '../repositories/PostRepository';
+import { useNewsFeedViewModel } from './useNewsFeedViewModel';
 
 const SAMPLE_POSTS = [
   {
@@ -61,9 +60,8 @@ const FeedItem = ({ item }) => (
 );
 
 const NewsFeedScreen = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [seeded, setSeeded] = useState(false);
+  const { posts, loading, error, fetchPosts, setPosts } = useNewsFeedViewModel();
+  const [seeded, setSeeded] = React.useState(false);
 
   // Function to seed Firestore with sample posts
   const seedFirestore = async () => {
@@ -79,22 +77,9 @@ const NewsFeedScreen = () => {
     }
   };
 
-  // Fetch posts using usecase (clean architecture)
-  const fetchPosts = async () => {
-    setLoading(true);
-    try {
-      const repo = new FirestorePostRepository();
-      const fetchedPosts = await fetchPostsUseCase(repo);
-      setPosts(fetchedPosts);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [fetchPosts]);
 
   return (
     <View style={styles.container}>
@@ -104,6 +89,8 @@ const NewsFeedScreen = () => {
       )}
       {loading ? (
         <Text>Loading...</Text>
+      ) : error ? (
+        <Text style={{ color: 'red' }}>Error: {error.message}</Text>
       ) : (
         <FlatList
           data={posts}
