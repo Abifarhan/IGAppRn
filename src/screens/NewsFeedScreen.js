@@ -35,9 +35,14 @@ const SAMPLE_POSTS = [
 const FeedItem = ({ item }) => (
   <View style={styles.item}>
     <View style={styles.header}>
-      <View style={styles.avatar} />
-      <Text style={styles.user}>{item.user}</Text>
-      <Text style={styles.time}>{item.time}</Text>
+      <Image
+        source={{ uri: item.avatar || 'https://randomuser.me/api/portraits/lego/1.jpg' }}
+        style={styles.avatar}
+      />
+      <View style={{ flex: 1 }}>
+        <Text style={styles.user}>{item.user}</Text>
+        <Text style={styles.time}>{item.time}</Text>
+      </View>
     </View>
     {item.type === 'text' && <Text style={styles.text}>{item.text}</Text>}
     {item.type === 'img' && (
@@ -47,8 +52,8 @@ const FeedItem = ({ item }) => (
       <View style={styles.videoPlaceholder}><Text style={styles.videoText}>Video</Text></View>
     )}
     <View style={styles.actions}>
-      <TouchableOpacity><Text style={styles.comment}>Comment</Text></TouchableOpacity>
-      <TouchableOpacity><Text style={styles.like}>Like</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.actionBtn}><Text style={styles.comment}>Comment</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.actionBtn}><Text style={styles.like}>Like</Text></TouchableOpacity>
     </View>
   </View>
 );
@@ -110,20 +115,101 @@ const NewsFeedScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', paddingTop: 40 },
-  title: { fontSize: 28, fontWeight: 'bold', color: '#1976d2', marginBottom: 10, alignSelf: 'center' },
-  item: { backgroundColor: '#f9f9f9', padding: 16, marginVertical: 8, marginHorizontal: 16, borderRadius: 12, elevation: 2 },
-  header: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  avatar: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#e0e0e0', marginRight: 8 },
-  user: { fontWeight: 'bold', fontSize: 16, marginRight: 8 },
-  time: { color: '#888', fontSize: 12 },
-  text: { fontSize: 15, marginBottom: 8 },
-  image: { width: '100%', height: 150, borderRadius: 8, marginBottom: 8 },
-  videoPlaceholder: { width: '100%', height: 150, borderRadius: 8, backgroundColor: '#ffe0e0', justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-  videoText: { color: '#d32f2f', fontWeight: 'bold', fontSize: 18 },
-  actions: { flexDirection: 'row', justifyContent: 'flex-end' },
-  comment: { color: '#1976d2', marginRight: 16 },
-  like: { color: '#1976d2' },
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f6fa',
+    paddingTop: 40,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#1976d2',
+    marginBottom: 10,
+    alignSelf: 'center',
+    letterSpacing: 1,
+  },
+  item: {
+    backgroundColor: '#fff',
+    padding: 16,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#e0e0e0',
+    marginRight: 12,
+  },
+  user: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#222',
+  },
+  time: {
+    color: '#888',
+    fontSize: 12,
+    marginTop: 2,
+  },
+  text: {
+    fontSize: 15,
+    marginBottom: 8,
+    color: '#333',
+  },
+  image: {
+    width: '100%',
+    height: 180,
+    borderRadius: 12,
+    marginBottom: 8,
+    backgroundColor: '#eee',
+  },
+  videoPlaceholder: {
+    width: '100%',
+    height: 180,
+    borderRadius: 12,
+    backgroundColor: '#ffe0e0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  videoText: {
+    color: '#d32f2f',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 8,
+  },
+  actionBtn: {
+    backgroundColor: '#e3f2fd',
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    marginLeft: 8,
+  },
+  comment: {
+    color: '#1976d2',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  like: {
+    color: '#1976d2',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
 });
 
 export default NewsFeedScreen;
