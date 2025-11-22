@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Button } from 'react-native';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { fetchPostsUseCase } from '../usecases/fetchPosts';
 
 const SAMPLE_POSTS = [
   {
@@ -77,13 +78,11 @@ const NewsFeedScreen = () => {
     }
   };
 
-  // Fetch posts from Firestore
+  // Fetch posts using usecase (clean architecture)
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const postsCollection = collection(db, 'posts');
-      const snapshot = await getDocs(postsCollection);
-      const fetchedPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const fetchedPosts = await fetchPostsUseCase();
       setPosts(fetchedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -117,26 +116,26 @@ const NewsFeedScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f6fa',
+    backgroundColor: '#23272e', // Android Studio dark background
     paddingTop: 40,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1976d2',
+    color: '#80cbc4', // teal accent
     marginBottom: 10,
     alignSelf: 'center',
     letterSpacing: 1,
   },
   item: {
-    backgroundColor: '#fff',
+    backgroundColor: '#2d333b', // card dark
     padding: 16,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.12,
     shadowRadius: 4,
     elevation: 3,
   },
@@ -149,42 +148,42 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#444857',
     marginRight: 12,
   },
   user: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#222',
+    color: '#fff',
   },
   time: {
-    color: '#888',
+    color: '#b0bec5',
     fontSize: 12,
     marginTop: 2,
   },
   text: {
     fontSize: 15,
     marginBottom: 8,
-    color: '#333',
+    color: '#eceff1',
   },
   image: {
     width: '100%',
     height: 180,
     borderRadius: 12,
     marginBottom: 8,
-    backgroundColor: '#eee',
+    backgroundColor: '#37474f',
   },
   videoPlaceholder: {
     width: '100%',
     height: 180,
     borderRadius: 12,
-    backgroundColor: '#ffe0e0',
+    backgroundColor: '#263238',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
   },
   videoText: {
-    color: '#d32f2f',
+    color: '#ffab91',
     fontWeight: 'bold',
     fontSize: 18,
   },
@@ -194,19 +193,19 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   actionBtn: {
-    backgroundColor: '#e3f2fd',
+    backgroundColor: '#37474f',
     borderRadius: 8,
     paddingVertical: 6,
     paddingHorizontal: 14,
     marginLeft: 8,
   },
   comment: {
-    color: '#1976d2',
+    color: '#80cbc4',
     fontWeight: 'bold',
     fontSize: 15,
   },
   like: {
-    color: '#1976d2',
+    color: '#80cbc4',
     fontWeight: 'bold',
     fontSize: 15,
   },
