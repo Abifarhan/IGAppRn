@@ -11,9 +11,9 @@ export function useNewsFeedViewModel() {
     setLoading(true);
     setError(null);
     try {
-      // Resolve use case from DI container
+      // Resolve use case from DI container (class with execute())
       const fetchPostsUseCase = container.get(TYPES.FetchPostsUseCase);
-      const fetchedPosts = await fetchPostsUseCase();
+      const fetchedPosts = await fetchPostsUseCase.execute();
       setPosts(fetchedPosts);
     } catch (err) {
       setError(err);
