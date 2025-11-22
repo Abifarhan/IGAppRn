@@ -32,21 +32,8 @@ const FeedItem = ({ item }) => (
 
 const NewsFeedScreen = () => {
   const { posts, loading, error, fetchPosts, setPosts } = useNewsFeedViewModel();
-  const [seeded, setSeeded] = React.useState(false);
 
-  // Function to seed Firestore with sample posts
-  const seedFirestore = async () => {
-    try {
-      const postsCollection = collection(db, 'posts');
-      for (const post of SAMPLE_POSTS) {
-        await addDoc(postsCollection, post);
-      }
-      setSeeded(true);
-      fetchPosts();
-    } catch (error) {
-      console.error('Error seeding Firestore:', error);
-    }
-  };
+  
 
   useEffect(() => {
     fetchPosts();
@@ -55,9 +42,7 @@ const NewsFeedScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>News Feed</Text>
-      {!seeded && (
-        <Button title="Seed Firestore with Sample Posts" onPress={seedFirestore} />
-      )}
+      
       {loading ? (
         <Text>Loading...</Text>
       ) : error ? (
