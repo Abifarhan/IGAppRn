@@ -4,35 +4,6 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useNewsFeedViewModel } from './useNewsFeedViewModel';
 
-const SAMPLE_POSTS = [
-  {
-    user: 'Raynor',
-    time: '14:00',
-    text: 'Text, Text, Text Text, Text, Text Text, Text, Text',
-    type: 'text',
-  },
-  {
-    user: 'Kerrigan',
-    time: '10:00',
-    text: '',
-    type: 'img',
-    img: 'https://i.pinimg.com/736x/fa/27/7d/fa277de6b142ab701dffda5d2279e5ca.jpg',
-  },
-  {
-    user: 'Zeratul',
-    time: '04.05',
-    text: 'Text, Text, Text Text, Text, Text Text, Text, Text',
-    type: 'text',
-  },
-  {
-    user: 'Tassadar',
-    time: '03.05',
-    text: 'Text',
-    type: 'video',
-    video: 'https://sample-videos.com/video123/mp4/240/big_buck_bunny_240p_1mb.mp4',
-  },
-];
-
 const FeedItem = ({ item }) => (
   <View style={styles.item}>
     <View style={styles.header}>

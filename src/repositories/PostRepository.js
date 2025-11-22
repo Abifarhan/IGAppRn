@@ -1,8 +1,9 @@
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import { IPostRepository } from '../domain/PostRepository';
+import { injectable } from 'inversify';
 
-export class FirestorePostRepository extends IPostRepository {
+injectable()
+export class FirestorePostRepository {
   async getAllPosts() {
     const postsCollection = collection(db, 'posts');
     const snapshot = await getDocs(postsCollection);

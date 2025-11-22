@@ -1,6 +1,6 @@
+
 import { useState, useCallback } from 'react';
-import { fetchPostsUseCase } from '../usecases/fetchPosts';
-import { FirestorePostRepository } from '../repositories/PostRepository';
+import { container, TYPES } from '../di/container';
 
 export function useNewsFeedViewModel() {
   const [posts, setPosts] = useState([]);
@@ -11,8 +11,9 @@ export function useNewsFeedViewModel() {
     setLoading(true);
     setError(null);
     try {
-      const repo = new FirestorePostRepository();
-      const fetchedPosts = await fetchPostsUseCase(repo);
+      // Resolve use case from DI container
+      const fetchPostsUseCase = container.get(TYPES.FetchPostsUseCase);
+      const fetchedPosts = await fetchPostsUseCase();
       setPosts(fetchedPosts);
     } catch (err) {
       setError(err);
