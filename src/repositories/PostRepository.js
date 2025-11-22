@@ -1,14 +1,15 @@
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { IPostRepository } from '../domain/PostRepository';
 
-export class PostRepository {
-  static async getAllPosts() {
+export class FirestorePostRepository extends IPostRepository {
+  async getAllPosts() {
     const postsCollection = collection(db, 'posts');
     const snapshot = await getDocs(postsCollection);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   }
 
-  static async addPost(post) {
+  async addPost(post) {
     const postsCollection = collection(db, 'posts');
     return await addDoc(postsCollection, post);
   }

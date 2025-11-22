@@ -1,5 +1,4 @@
-import { PostRepository } from '../repositories/PostRepository';
-
-export async function fetchPostsUseCase() {
-  return await PostRepository.getAllPosts();
+// Use case depends on repository interface, not implementation
+export async function fetchPostsUseCase(postRepository) {
+  return await postRepository.getAllPosts();
 }

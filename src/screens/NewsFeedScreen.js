@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Button } fro
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { fetchPostsUseCase } from '../usecases/fetchPosts';
+import { FirestorePostRepository } from '../repositories/PostRepository';
 
 const SAMPLE_POSTS = [
   {
@@ -82,7 +83,8 @@ const NewsFeedScreen = () => {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const fetchedPosts = await fetchPostsUseCase();
+      const repo = new FirestorePostRepository();
+      const fetchedPosts = await fetchPostsUseCase(repo);
       setPosts(fetchedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
