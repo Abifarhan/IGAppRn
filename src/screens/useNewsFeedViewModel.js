@@ -7,14 +7,17 @@ export function useNewsFeedViewModel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = useCallback(async (params) => {
     setLoading(true);
     setError(null);
     try {
-      // Resolve use case from DI container (class with execute())
       const fetchPostsUseCase = container.get(TYPES.FetchPostsUseCase);
-      const fetchedPosts = await fetchPostsUseCase.execute();
-      setPosts(fetchedPosts);
+      const result = await fetchPostsUseCase.execute(params);
+      if (result && result.ok) {
+        setPosts(result.value || []);
+      } else {
+        setError(result ? result.error : new Error('Unknown error'));
+      }
     } catch (err) {
       setError(err);
     }

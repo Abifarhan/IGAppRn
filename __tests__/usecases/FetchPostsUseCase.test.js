@@ -1,4 +1,5 @@
 import { FetchPostsUseCase } from '../../src/usecases/FetchPostsUseCase';
+import { isSuccess } from '../../src/domain/Result';
 
 describe('FetchPostsUseCase', () => {
   it('calls repository.getAllPosts and returns posts', async () => {
@@ -11,6 +12,7 @@ describe('FetchPostsUseCase', () => {
     const result = await useCase.execute();
 
     expect(mockRepo.getAllPosts).toHaveBeenCalledTimes(1);
-    expect(result).toBe(fakePosts);
+    expect(isSuccess(result)).toBe(true);
+    expect(result.value).toBe(fakePosts);
   });
 });
