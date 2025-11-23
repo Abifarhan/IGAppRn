@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { container, TYPES } from '../di/container';
 
 export function useNewsFeedViewModel() {
@@ -67,6 +67,34 @@ export function useNewsFeedViewModel() {
     }
   }, [fetchPosts]);
 
+  // Realtime subscription
+  const realtimeRef = useRef(null);
+
+  const subscribeRealtime = useCallback((params = {}) => {
+    try {
+      const repo = container.get(TYPES.IPostRepository);
+      const unsubscribe = repo.getPostsRealtime(params, (updatedPosts) => {
+        setPosts(updatedPosts);
+      });
+      realtimeRef.current = unsubscribe;
+      return unsubscribe;
+    } catch (err) {
+      setError(err);
+      return null;
+    }
+  }, [realtimeRef]);
+
+  const unsubscribeRealtime = useCallback(() => {
+    if (realtimeRef.current) {
+      try {
+        realtimeRef.current();
+      } catch (e) {
+        // ignore
+      }
+      realtimeRef.current = null;
+    }
+  }, [realtimeRef]);
+
   return {
     posts,
     loading,
@@ -77,5 +105,7 @@ export function useNewsFeedViewModel() {
     loadMore,
     lastDoc,
     hasMore,
+    subscribeRealtime,
+    unsubscribeRealtime,
   };
 }

@@ -37,4 +37,22 @@ export class FirestorePostRepository {
     const postsCollection = collection(this.db, 'posts');
     return await addDoc(postsCollection, post);
   }
+
+  getPostsRealtime({ orderBy = null, limit = null } = {}, onUpdate) {
+    const postsCollection = collection(this.db, 'posts');
+    const clauses = [];
+    if (orderBy && orderBy.field) {
+      clauses.push(fbOrderBy(orderBy.field, orderBy.direction || 'desc'));
+    }
+    if (limit && Number.isInteger(limit)) {
+      clauses.push(fbLimit(limit));
+    }
+    const q = clauses.length > 0 ? fbQuery(postsCollection, ...clauses) : postsCollection;
+    // onSnapshot returns an unsubscribe function
+    const unsubscribe = require('firebase/firestore').onSnapshot(q, (snapshot) => {
+      const posts = snapshot.docs.map(doc => mapDocToPost(doc));
+      onUpdate(posts, snapshot);
+    });
+    return unsubscribe;
+  }
 }

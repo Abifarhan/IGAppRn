@@ -24,7 +24,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npx jest --colors --runInBand
+      - name: Run tests with coverage
+        run: npx jest --colors --runInBand --coverage
         env:
           CI: true
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
