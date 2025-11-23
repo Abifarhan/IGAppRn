@@ -6,15 +6,31 @@ export function useNewsFeedViewModel() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [pageSize] = useState(10);
 
-  const fetchPosts = useCallback(async (params) => {
+  const fetchPosts = useCallback(async (params = {}, { reset = false } = {}) => {
     setLoading(true);
     setError(null);
     try {
       const fetchPostsUseCase = container.get(TYPES.FetchPostsUseCase);
-      const result = await fetchPostsUseCase.execute(params);
+      // inject pageSize and cursor if not provided
+      const callParams = { ...(params || {}), orderBy: params.orderBy || { field: 'createdAt', direction: 'desc' }, limit: params.limit || pageSize };
+      if (!reset && lastDoc) callParams.cursor = lastDoc;
+
+      const result = await fetchPostsUseCase.execute(callParams);
       if (result && result.ok) {
-        setPosts(result.value || []);
+        const payload = result.value || {};
+        const fetched = payload.posts || [];
+        const newLast = payload.lastDoc || null;
+        if (reset) {
+          setPosts(fetched);
+        } else {
+          setPosts(prev => [...prev, ...fetched]);
+        }
+        setLastDoc(newLast);
+        setHasMore(Boolean(newLast));
       } else {
         setError(result ? result.error : new Error('Unknown error'));
       }
@@ -22,7 +38,12 @@ export function useNewsFeedViewModel() {
       setError(err);
     }
     setLoading(false);
-  }, []);
+  }, [lastDoc, pageSize]);
+
+  const loadMore = useCallback(async () => {
+    if (!hasMore || loading) return;
+    await fetchPosts({}, { reset: false });
+  }, [hasMore, loading, fetchPosts]);
 
   const seedPosts = useCallback(async (postsToSeed = []) => {
     setLoading(true);
@@ -53,5 +74,8 @@ export function useNewsFeedViewModel() {
     fetchPosts,
     seedPosts,
     setPosts, // for seeding or other direct updates
+    loadMore,
+    lastDoc,
+    hasMore,
   };
 }

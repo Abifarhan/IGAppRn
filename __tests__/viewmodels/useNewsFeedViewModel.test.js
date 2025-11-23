@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import { rebind } from '../../src/test/utils/diTestHelper';
 import { TYPES } from '../../src/di/container';
 const fakePosts = [{ id: 'p1', text: 'hello' }];
-const mockUseCase = { execute: jest.fn().mockResolvedValue({ ok: true, value: fakePosts }) };
+const mockUseCase = { execute: jest.fn().mockResolvedValue({ ok: true, value: { posts: fakePosts, lastDoc: null } }) };
 
 import { useNewsFeedViewModel } from '../../src/screens/useNewsFeedViewModel';
 

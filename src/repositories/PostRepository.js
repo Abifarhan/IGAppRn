@@ -27,7 +27,9 @@ export class FirestorePostRepository {
 
     const q = clauses.length > 0 ? fbQuery(postsCollection, ...clauses) : postsCollection;
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const lastDoc = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null;
+    return { posts, lastDoc };
   }
 
   async addPost(post) {
