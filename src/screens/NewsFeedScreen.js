@@ -54,12 +54,14 @@ const NewsFeedScreen = () => {
       )}
       {hasMore && <Button title="Load more" onPress={() => loadMore()} />}
 
-      <Button title="Seed" onPress={() => {
-        const sample = [
-          { user: 'Sys', type: 'text', text: 'Seeded post', time: 'now' }
-        ];
-        seedPosts(sample);
-      }} />
+      {__DEV__ && (
+        <Button title="Seed" onPress={() => {
+          const sample = [
+            { user: 'Sys', type: 'text', text: 'Seeded post', time: 'now' }
+          ];
+          seedPosts(sample);
+        }} />
+      )}
     </View>
   );
 };
