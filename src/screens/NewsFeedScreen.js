@@ -40,6 +40,8 @@ const NewsFeedScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>News Feed</Text>
+      <Text style={{ color: '#9e9e9e', alignSelf: 'center' }}>Posts: {posts.length}</Text>
+      {error && <Text style={{ color: 'orange', alignSelf: 'center' }}>Last error: {error && error.message}</Text>}
       
       {loading ? (
         <Text>Loading...</Text>
@@ -57,9 +59,21 @@ const NewsFeedScreen = () => {
       {__DEV__ && (
         <Button title="Seed" onPress={() => {
           const sample = [
-            { user: 'Sys', type: 'text', text: 'Seeded post', time: 'now' }
+            { user: 'Sys', type: 'text', text: 'Seeded post', time: 'now', createdAt: new Date() }
           ];
-          seedPosts(sample);
+          seedPosts(sample).then(r => {
+            console.log('[Screen] seed result', r);
+            try {
+              if (r && r.ok && Array.isArray(r.value) && r.value.length > 0) {
+                const ref = r.value[0];
+                const id = ref && ref.id ? ref.id : String(Date.now());
+                const optimistic = { id, user: sample[0].user, type: sample[0].type, text: sample[0].text, time: new Date().toISOString(), avatar: null };
+                setPosts(prev => [optimistic, ...prev]);
+              }
+            } catch (e) {
+              console.log('[Screen] seed optimistic update failed', e);
+            }
+          });
         }} />
       )}
     </View>
