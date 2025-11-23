@@ -29,7 +29,7 @@ const FeedItem = ({ item }) => (
 );
 
 const NewsFeedScreen = () => {
-  const { posts, loading, error, fetchPosts, setPosts } = useNewsFeedViewModel();
+  const { posts, loading, error, fetchPosts, setPosts, seedPosts } = useNewsFeedViewModel();
 
   
 
@@ -52,6 +52,12 @@ const NewsFeedScreen = () => {
           keyExtractor={item => item.id}
         />
       )}
+      <Button title="Seed" onPress={() => {
+        const sample = [
+          { user: 'Sys', type: 'text', text: 'Seeded post', time: 'now' }
+        ];
+        seedPosts(sample);
+      }} />
     </View>
   );
 };

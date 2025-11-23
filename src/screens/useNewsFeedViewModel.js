@@ -24,11 +24,34 @@ export function useNewsFeedViewModel() {
     setLoading(false);
   }, []);
 
+  const seedPosts = useCallback(async (postsToSeed = []) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const seedUseCase = container.get(TYPES.SeedPostsUseCase);
+      const result = await seedUseCase.execute(postsToSeed);
+      if (result && result.ok) {
+        // optionally refresh posts after seeding
+        await fetchPosts();
+        return result;
+      } else {
+        setError(result ? result.error : new Error('Seed failed'));
+        return result;
+      }
+    } catch (err) {
+      setError(err);
+      return { ok: false, error: err };
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchPosts]);
+
   return {
     posts,
     loading,
     error,
     fetchPosts,
+    seedPosts,
     setPosts, // for seeding or other direct updates
   };
 }

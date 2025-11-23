@@ -5,6 +5,7 @@ import { Container } from 'inversify';
 const TYPES = {
   IPostRepository: Symbol.for('IPostRepository'),
   FetchPostsUseCase: Symbol.for('FetchPostsUseCase'),
+  SeedPostsUseCase: Symbol.for('SeedPostsUseCase'),
 };
 
 // Create the container
@@ -22,6 +23,13 @@ container.bind(TYPES.IPostRepository).toDynamicValue(() => {
 container.bind(TYPES.FetchPostsUseCase).toDynamicValue(() => {
   const repo = container.get(TYPES.IPostRepository);
   const UseCase = require('../usecases/FetchPostsUseCase').FetchPostsUseCase;
+  return new UseCase(repo);
+}).inSingletonScope();
+
+// Bind SeedPostsUseCase
+container.bind(TYPES.SeedPostsUseCase).toDynamicValue(() => {
+  const repo = container.get(TYPES.IPostRepository);
+  const UseCase = require('../usecases/SeedPostsUseCase').SeedPostsUseCase;
   return new UseCase(repo);
 }).inSingletonScope();
 
