@@ -1,7 +1,5 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { FirestorePostRepository } from '../repositories/PostRepository';
-import { fetchPostsUseCase } from '../usecases/fetchPosts';
 
 // Define symbols for DI
 const TYPES = {
@@ -12,11 +10,15 @@ const TYPES = {
 // Create the container
 const container = new Container();
 
-// Bind repository implementation to interface
-container.bind(TYPES.IPostRepository).to(FirestorePostRepository);
+// Bind repository implementation lazily to avoid requiring heavy ESM modules
+container.bind(TYPES.IPostRepository).toDynamicValue(() => {
+  // require at runtime so tests that only rebind won't pull in firebase
+  const Repo = require('../repositories/PostRepository').FirestorePostRepository;
+  const db = require('../firebase/config').db;
+  return new Repo(db);
+});
 
 // Bind use case as a dynamic value that resolves the repository from the container
-// Bind FetchPostsUseCase using dynamic factory (no decorators required)
 container.bind(TYPES.FetchPostsUseCase).toDynamicValue(() => {
   const repo = container.get(TYPES.IPostRepository);
   const UseCase = require('../usecases/FetchPostsUseCase').FetchPostsUseCase;
