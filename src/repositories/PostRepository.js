@@ -1,14 +1,32 @@
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, query as fbQuery, orderBy as fbOrderBy, limit as fbLimit, startAfter as fbStartAfter } from 'firebase/firestore';
 
 export class FirestorePostRepository {
   constructor(db) {
     this.db = db;
   }
 
-  async getAllPosts({ orderBy = null, limit = null, where = null } = {}) {
+  async getAllPosts({ orderBy = null, limit = null, cursor = null, where = null } = {}) {
     const postsCollection = collection(this.db, 'posts');
-    // For now just a simple getDocs. Ordering/pagination will be added in next step.
-    const snapshot = await getDocs(postsCollection);
+
+    // Build query clauses
+    const clauses = [];
+
+    if (orderBy && orderBy.field) {
+      // orderBy: { field: 'createdAt', direction: 'desc' }
+      clauses.push(fbOrderBy(orderBy.field, orderBy.direction || 'desc'));
+    }
+
+    if (limit && Number.isInteger(limit)) {
+      clauses.push(fbLimit(limit));
+    }
+
+    if (cursor) {
+      // cursor should be a document snapshot or a value; prefer snapshot
+      clauses.push(fbStartAfter(cursor));
+    }
+
+    const q = clauses.length > 0 ? fbQuery(postsCollection, ...clauses) : postsCollection;
+    const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   }
 
