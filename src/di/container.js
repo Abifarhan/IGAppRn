@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { Container } from 'inversify';
 import { FirestorePostRepository } from '../repositories/PostRepository';
 import { fetchPostsUseCase } from '../usecases/fetchPosts';
-import { FetchPostsUseCase } from '../usecases/FetchPostsUseCase';
 
 // Define symbols for DI
 const TYPES = {
@@ -17,7 +16,11 @@ const container = new Container();
 container.bind(TYPES.IPostRepository).to(FirestorePostRepository);
 
 // Bind use case as a dynamic value that resolves the repository from the container
-// Bind FetchPostsUseCase class
-container.bind(TYPES.FetchPostsUseCase).to(FetchPostsUseCase).inSingletonScope();
+// Bind FetchPostsUseCase using dynamic factory (no decorators required)
+container.bind(TYPES.FetchPostsUseCase).toDynamicValue(() => {
+  const repo = container.get(TYPES.IPostRepository);
+  const UseCase = require('../usecases/FetchPostsUseCase').FetchPostsUseCase;
+  return new UseCase(repo);
+}).inSingletonScope();
 
 export { container, TYPES };

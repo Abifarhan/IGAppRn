@@ -1,11 +1,6 @@
-import { injectable, inject } from 'inversify';
-import { TYPES } from '../di/container';
-
-@injectable()
+// Plain JS class (no decorators) so it can be instantiated directly in tests
 export class FetchPostsUseCase {
-  constructor(
-    @inject(TYPES.IPostRepository) postRepository
-  ) {
+  constructor(postRepository) {
     this.postRepository = postRepository;
   }
 

@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Button } from 'react-native';
-import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../firebase/config';
 import { useNewsFeedViewModel } from './useNewsFeedViewModel';
 
 const FeedItem = ({ item }) => (
