@@ -1,3 +1,6 @@
+[![Coverage Status](https://codecov.io/gh/Abifarhan/IGAppRn/branch/main/graph/badge.svg?token=CODECOV_TOKEN)](https://codecov.io/gh/Abifarhan/IGAppRn)
+
+````markdown
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
