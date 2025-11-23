@@ -1,4 +1,5 @@
 import { collection, getDocs, addDoc, query as fbQuery, orderBy as fbOrderBy, limit as fbLimit, startAfter as fbStartAfter } from 'firebase/firestore';
+import { mapDocToPost } from '../domain/Post';
 
 export class FirestorePostRepository {
   constructor(db) {
@@ -27,7 +28,7 @@ export class FirestorePostRepository {
 
     const q = clauses.length > 0 ? fbQuery(postsCollection, ...clauses) : postsCollection;
     const snapshot = await getDocs(q);
-    const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const posts = snapshot.docs.map(doc => mapDocToPost(doc));
     const lastDoc = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null;
     return { posts, lastDoc };
   }
