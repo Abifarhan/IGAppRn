@@ -13,6 +13,7 @@ export function useNewsFeedViewModel() {
   const fetchPosts = useCallback(async (params = {}, { reset = false } = {}) => {
     setLoading(true);
     setError(null);
+    console.log('[ViewModel] fetchPosts start', { params, reset });
     try {
       const fetchPostsUseCase = container.get(TYPES.FetchPostsUseCase);
       // inject pageSize and cursor if not provided
@@ -24,6 +25,7 @@ export function useNewsFeedViewModel() {
         const payload = result.value || {};
         const fetched = payload.posts || [];
         const newLast = payload.lastDoc || null;
+        console.log('[ViewModel] fetchPosts success', { fetchedLength: fetched.length, newLast });
         if (reset) {
           setPosts(fetched);
         } else {
@@ -32,9 +34,12 @@ export function useNewsFeedViewModel() {
         setLastDoc(newLast);
         setHasMore(Boolean(newLast));
       } else {
-        setError(result ? result.error : new Error('Unknown error'));
+        const err = result ? result.error : new Error('Unknown error');
+        console.log('[ViewModel] fetchPosts failure', err);
+        setError(err);
       }
     } catch (err) {
+      console.log('[ViewModel] fetchPosts exception', err);
       setError(err);
     }
     setLoading(false);
@@ -48,18 +53,22 @@ export function useNewsFeedViewModel() {
   const seedPosts = useCallback(async (postsToSeed = []) => {
     setLoading(true);
     setError(null);
+    console.log('[ViewModel] seedPosts start', { count: postsToSeed.length });
     try {
       const seedUseCase = container.get(TYPES.SeedPostsUseCase);
       const result = await seedUseCase.execute(postsToSeed);
       if (result && result.ok) {
+        console.log('[ViewModel] seedPosts success', { created: result.value });
         // optionally refresh posts after seeding
         await fetchPosts();
         return result;
       } else {
+        console.log('[ViewModel] seedPosts failure', result && result.error);
         setError(result ? result.error : new Error('Seed failed'));
         return result;
       }
     } catch (err) {
+      console.log('[ViewModel] seedPosts exception', err);
       setError(err);
       return { ok: false, error: err };
     } finally {
@@ -73,12 +82,16 @@ export function useNewsFeedViewModel() {
   const subscribeRealtime = useCallback((params = {}) => {
     try {
       const repo = container.get(TYPES.IPostRepository);
+      console.log('[ViewModel] subscribeRealtime start', { params });
       const unsubscribe = repo.getPostsRealtime(params, (updatedPosts) => {
+        console.log('[ViewModel] subscribeRealtime update', { len: updatedPosts && updatedPosts.length });
         setPosts(updatedPosts);
       });
+      console.log('[ViewModel] subscribeRealtime subscribed');
       realtimeRef.current = unsubscribe;
       return unsubscribe;
     } catch (err) {
+      console.log('[ViewModel] subscribeRealtime exception', err);
       setError(err);
       return null;
     }
